@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+{% extends "tournaments/base.html"%}
+{% load static %}
+
+{% block style %}
+<link rel="stylesheet" type="text/css" href="{% static 'tournaments/portal_style.css' %}" xmlns="http://www.w3.org/1999/html">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+<link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
+<script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
+{% endblock %}
+
+{% block content%}
+
+{% if logged_in and is_organizer %}
+    <button type="button" id="edit" class="btn btn-info" data-toggle="modal" data-target="#exerciseModal">
+        Edit
+    </button>
+
+    <button type="button" id="edit_sponsors" class="btn btn-info" data-toggle="modal" data-target="#sponsorsModal">
+        Sponsors
+    </button>
+{% endif %}
+
+{% if error or success %}
+<div class="container" id="register_feedback">
+  {% if error %}
+    <div class="alert alert-danger alert-dismissible">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        {{ error }}
+    </div>
+  {% endif %}
+
+  {% if success %}
+    <div class="alert alert-primary alert-dismissible">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        {{ success }}
+    </div>
+  {% endif %}
+</div>
+{% endif %}
+
+<div id="tournament_header" class="container rounded-top cont-tournament">
+    <div class="header rounded-top">
+        <h2>{{tournament.name}}</h2>
+        <br>
+        <h6>Discipline: {{tournament.discipline}}</h6>
+        <h6 id="date">{{tournament.date}}</h6>
+    </div>
+</div>
+
+
+<div id="container-info" class="container border rounded-bottom">
+    <div>
+    <h4 id="details">Details</h4>
+    <table>
+        <tr>
+            <td>
+                <b>Organizer:</b>
+            </td>
+
+            <td>
+                {{tournament.organizer.first_name}} {{tournament.organizer.last_name}}
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <b>Organizer's email: </b>
+            </td>
+
+            <td>
+                {{tournament.organizer.email}}
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <b>Limit of participants: </b>
+            </td>
+
+            <td>
+                {{tournament.limit}}
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <b>Seeded competitors: </b>
+            </td>
+
+            <td>
+                {{tournament.num_of_seeded}}
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <b>Deadline of registration: </b>
+            </td>
+
+            <td>
+                {{tournament.deadline}}
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <b>Location: </b>
+            </td>
+
+            <td>
+                {{tournament.localization}}
+            </td>
+        </tr>
+    </table>
+
+        <form method="get" target="_blank">
+            {% if logged_in %}
+                <button type="button" class="btn btn-info" style="margin: 1%" data-toggle="modal" data-target="#registerModal">Sign Up</button>
+            {% else %}
+                <a href="http://127.0.0.1:8000/tournamentsPortal/login"><button type="button" class="btn btn-info" style="margin: 1%">Sign Up</button></a>
+            {% endif %}
+            <button class="btn btn-secondary" name="showDraw" value={{tournament.id}}>Show Draw</button>
+        </form>
+
+
+    </div>
+    <div id="map"></div>
+
+
+</div>
+
+
+{% if sponsors %}
+
+<div id="logos" class="container">
+    <div class="carousel" data-flickity='{ "groupCells": true, "wrapAround": false, "draggable": true, "autoPlay": 3000 }'>
+        {% for sponsor in sponsors %}
+              <div class="carousel-image">
+                  <img src={{sponsor.sponsor.logo.url}} width=100% class="odbicie" oncontextmenu="window.event.returnValue=false;"/>
+              </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endif %}
+
+    <input id="address" type="hidden" value={{tournament.localization}}>
+    <script>
+      function initMap() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 10,
+          center: {lat: -34.397, lng: 150.644}
+        });
+        var geocoder = new google.maps.Geocoder();
+
+        geocodeAddress(geocoder, map);
+
+      }
+
+      function geocodeAddress(geocoder, resultsMap) {
+        var address = document.getElementById('address').value;
+        geocoder.geocode({'address': address}, function(results, status) {
+          if (status === 'OK') {
+            resultsMap.setCenter(results[0].geometry.location);
+            var marker = new google.maps.Marker({
+              map: resultsMap,
+              position: results[0].geometry.location
+            });
+          } else {
+            alert('Geocode was not successful for the following reason: ' + status);
+          }
+        });
+      }
+    </script>
+
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC_CpTK7c1S6RaqtITV0N-VIwHhWd98ahM&callback=initMap">
+    </script>
+
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="exerciseModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel" style="color:white">Edit tournament data</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form id="modify-form" method="post" onsubmit="return check_submit()">
+            {% csrf_token %}
+            <div class="form-group">
+                <input type="hidden" id="name" name="edit" value='{{tournament.id}}'>
+                <label for="tournament_form_name">Name</label>
+                <input id="tournament_form_name" type="text" class="form-control" name="tournament_form_name" value='{{tournament.name}}'>
+            </div>
+            <div class="form-group">
+                <label for="discipline">Discipline</label>
+                <input type="text" class="form-control" name="discipline" value='{{tournament.discipline}}'>
+            </div>
+            <div class="form-group">
+                <label for="date">Date</label>
+                <input id="tournament_date" type="date" class="form-control" name="date" value={{tournament.date|date:"Y-m-d"}}>
+            </div>
+            <div class="form-group">
+                <label for="location">Location</label>
+                <input type="text" class="form-control" name="location" value='{{tournament.localization}}'>
+            </div>
+            <div class="form-group">
+                <label for="deadline">Deadline of registration</label>
+                <input id="deadline_date" type="date" class="form-control" name="deadline" value={{tournament.deadline|date:"Y-m-d"}}>
+            </div>
+            <div class="form-group">
+                <label for="limit">Limit of participants</label>
+                <select class="form-control" id="limit" name="limit">
+                  <option>2</option>
+                  <option>4</option>
+                  <option>8</option>
+                  <option>16</option>
+                  <option>32</option>
+                  <option>64</option>
+                  <option>128</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="seeded">Number of seeded participants</label>
+                <select class="form-control" id="seeded" name="seeded">
+                  <option>2</option>
+                  <option>4</option>
+                  <option>8</option>
+                  <option>16</option>
+                  <option>32</option>
+                  <option>64</option>
+                  <option>128</option>
+                </select>
+            </div>
+
+        </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" >Close</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="return check_submit()">LOOOL</button>
+            <button id="submit-tournament" form="modify-form" type="submit" class="btn btn-primary" name="editTournament">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="sponsorsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title"  style="color:white">Manage Sponsors</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+
+        {% if all_sponsors %}
+          <div class="modal-body">
+            <form id="sponsor-form" method="post" onsubmit="return confirm('Are you sure?')">
+            {% csrf_token %}
+            <div class="form-group">
+                <input name='tournament_info' type="hidden" value={{tournament.id}}>
+                <select id="sponsor" name="sponsor" class="form-control">
+                {% for sponsor in all_sponsors %}
+                    <option value={{sponsor.id}}>{{ sponsor.name }}</option>
+                {% endfor %}
+                </select>
+            </div>
+        </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" >Close</button>
+            <button id="submit-sponsor" form="sponsor-form" type="submit" class="btn btn-primary" name="addSponsor">Add Sponsor</button>
+          </div>
+
+        {% else %}
+            <div class="modal-body">
+                <h4 style="text-align: center; margin: 10%;">No available sponsors</h4>
+            </div>
+        {% endif %}
+
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+        <!-- Modal -->
+    <div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title"  style="color:white">Sign up for tournament</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+
+          <div class="modal-body">
+            <form id="register-form" method="post" onsubmit="return confirm('Are you sure?')">
+                {% csrf_token %}
+                <div class="form-group">
+                    <input name='tournament_info' type="hidden" value={{tournament.id}}>
+                    <label for="user_license">License</label>
+                    <input id="user_license" type="text" class="form-control" name="user_license" value="">
+                </div>
+                <div class="form-group">
+                    <label for="ranking">Ranking</label>
+                    <input id="ranking" type="number" min="1" class="form-control" name="ranking" value="">
+                </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" >Close</button>
+            <button id="submit-register" form="register-form" type="submit" class="btn btn-primary" name="register">Sign Up</button>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+
+ <script
+    src="https://code.jquery.com/jquery-3.1.1.min.js"
+    integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+    crossorigin="anonymous">
+    </script>
+
+<script src="{% static 'tournaments/app.js' %}"></script>
+{% endblock %}

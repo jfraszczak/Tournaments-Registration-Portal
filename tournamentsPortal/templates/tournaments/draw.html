@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tournachella</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'tournaments/portal_style.css' %}" xmlns="http://www.w3.org/1999/html">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
+    <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
+</head>
+
+<body>
+
+    <div class="container head-draw rounded">
+        <h2>{{tournament.name}} - Main Draw</h2>
+    </div>
+
+    <div class="container-fluid body-draw rounded border">
+
+        <div class="row">
+            {% for stage in draw %}
+                    <div class="col-sm my-auto">
+                    {% for match in stage %}
+                    <div class="container match-draw">
+                        <div class="container match border rounded-top">
+                            {% if match.user1 %}
+                                {% if match.winner == match.user1 %}
+                                <div class="winner">
+                                {{ match.user1.first_name }} {{ match.user1.last_name }}
+                                    {% if match.user1_seed != -1 %}
+                                    <span class="seed my-auto">[{{ match.user1_seed }}]</span>
+                                    {% endif %}
+                                </div>
+                                {% else %}
+                                    {{ match.user1.first_name }} {{ match.user1.last_name }}
+                                    {% if match.user1_seed != -1 %}
+                                    <span class="seed my-auto">[{{ match.user1_seed }}]</span>
+                                    {% endif %}
+                                {% endif %}
+                            {% else %}
+                                TBD
+                            {% endif %}
+                        </div>
+                        <div class="container match border rounded-bottom">
+                            {% if match.user2 %}
+                                {% if match.winner == match.user2 %}
+                                <div class="winner">
+                                {{ match.user2.first_name }} {{ match.user2.last_name }}
+                                    {% if match.user2_seed != -1 %}
+                                    <span class="seed my-auto">[{{ match.user2_seed }}]</span>
+                                    {% endif %}
+                                </div>
+                                {% else %}
+                                    {{ match.user2.first_name }} {{ match.user2.last_name }}
+                                    {% if match.user2_seed != -1 %}
+                                    <span class="seed my-auto">[{{ match.user2_seed }}]</span>
+                                    {% endif %}
+                                {% endif %}
+                            {% else %}
+                                TBD
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                    </div>
+            {% endfor %}
+        </div>
+
+    </div>
+
+
+ <script
+    src="https://code.jquery.com/jquery-3.1.1.min.js"
+    integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+    crossorigin="anonymous">
+    </script>
+
+<script src="{% static 'tournaments/app.js' %}"></script>
+
+</body>
+
+</html>

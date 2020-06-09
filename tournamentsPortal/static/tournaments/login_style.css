@@ -1,0 +1,106 @@
+.container {
+    width: 23%;
+    margin-top: 1%;
+    margin-bottom: 0%;
+    border: solid blue 1px;
+    padding-top: 1%;
+    padding-right: 2%;
+    padding-bottom: 1%;
+    padding-left: 2%;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+}
+
+.btn-primary {
+    margin: 0 auto;
+    display: block;
+    width: 100%;
+}
+
+.form-control {
+    height: 2em;
+}
+
+#login {
+    padding: 0.3%;
+    padding-top: 1%
+}
+
+#sign_in {
+    padding: 0.3%;
+    padding-top: 1%
+}
+
+p {
+    text-align: center;
+}
+
+body {
+    background-color: whitesmoke;
+    overflow:hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+@media all and (max-width: 900px) {
+    .container {
+        min-width: 70%;
+        margin-top: 5%;
+    }
+}
+
+.alert-danger {
+    margin-top: 3%;
+    width: 100%;
+    text-align: center;
+}
+
+h2 {
+    text-align: center;
+    padding: 5%;
+}
+
+h6 {
+    text-align: center;
+    color: gray;
+}
+
+h5 {
+    text-align: center;
+}
+
+.form-control {
+    background-color: white;
+}
+
+#forgot_passwordHR{
+    margin-top: 10%;
+    margin-bottom: 7%;
+}
+
+#info {
+    margin-top: 2%;
+    width: 40%;
+    text-align: center;
+}
+
+#info_login {
+    margin-top: 2%;
+    width: 30%;
+    text-align: center;
+}
+
+#info_link {
+    margin-top: 2%;
+    width: 35%;
+    text-align: center;
+}
+
+.info_reset {
+    margin-top: 2%;
+    width: 30%;
+    text-align: center;
+}

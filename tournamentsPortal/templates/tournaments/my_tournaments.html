@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+{% extends "tournaments/base.html"%}
+{% load static %}
+
+{% block style %}
+<link rel="stylesheet" type="text/css" href="{% static 'tournaments/portal_style.css' %}" xmlns="http://www.w3.org/1999/html">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+{% endblock %}
+
+{% block content%}
+
+
+<div id="main-container" class="container">
+        <div id="search-cont">
+            <input id="my-search" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <button id="search-button" type="button" class="btn btn-info">Search</button>
+        </div>
+
+    {% if info %}
+        {% if color == 'danger' %}
+            <div class="alert alert-danger alert-dismissible" style="width: 40%; margin: 0 auto;text-align: center;margin-top: 1%;">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                {{info}}
+            </div>
+        {% else %}
+            <div class="alert alert-primary alert-dismissible" style="width: 40%; margin: 0 auto;text-align: center;margin-top: 1%;">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                {{info}}
+            </div>
+        {% endif %}
+    {% endif %}
+
+
+
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link active" id="profile-tab" data-toggle="tab" href="#matches" role="tab" aria-controls="profile" aria-selected="false">Matches</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="home-tab" data-toggle="tab" href="#tournaments" role="tab" aria-controls="home" aria-selected="true">Tournaments</a>
+          </li>
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane fade"  id="tournaments" role="tabpanel" aria-labelledby="home-tab">
+
+            <div class="tab-content" id="myTabContent">
+              <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+              {% for tournament in tournaments %}
+                <div class="container rounded cont-tournament">
+                    <div class="header rounded-top">
+                        <h2>{{tournament.tournament.name}}</h2>
+                        <br>
+                        <h6>Discipline: {{tournament.tournament.discipline}}</h6>
+                        <h6 id="date">{{tournament.tournament.date}}</h6>
+                    </div>
+                    <div class="footer border rounded-bottom">
+                        <form method="get">
+                            <input type="hidden" name="tournament" value={{tournament.tournament.id}}>
+                            <button type="submit" class="btn btn-info see_more" value="">Find out more</button>
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+
+            </div>
+        </div>
+      </div>
+
+
+
+        <div class="tab-pane fade show active"  id="matches" role="tabpanel" aria-labelledby="home-tab">
+
+        <div class="tab-content" id="myTabContent2">
+          <div class="tab-pane fade show active" role="tabpanel" aria-labelledby="home-tab">
+          {% for match in matches %}
+            <div class="container rounded cont-tournament">
+                <div class="header rounded-top">
+                    <h6>Opponent</h6>
+                    {% if user != match.user1 and match.user1 is not None %}
+                        <h2>{{match.user1.first_name}} {{match.user1.last_name}}</h2>
+                    {% elif match.user2 is not None %}
+                        <h2>{{match.user2.first_name}} {{match.user2.last_name}}</h2>
+                    {% else %}
+                        <h2>TBD</h2>
+                    {% endif %}
+                    <br>
+                    <h6>Stage: {{match.stage_name}}</h6>
+                    <h6 id="tournament_name">Tournament: {{match.tournament.name}}</h6>
+                </div>
+                <div class="footer border rounded-bottom" style="display: flex;justify-content: space-between"">
+                    <div>
+                    <h4>Details</h4>
+                    <p style="margin:0"><b>Date:</b> {{match.tournament.date}}</p>
+                    <p style="margin:0"><b>Location:</b> {{match.tournament.localization}}</p>
+
+                    <br>
+
+                    <form method="get">
+                        <input type="hidden" name="tournament" value={{match.tournament.id}}>
+                        <button type="submit" class="btn btn-info see_more" value="">Find out more</button>
+                    </form>
+                    </div>
+
+                    {% if user == match.user1 and match.user2 is not None and match.user1_decision is None %}
+                    <div>
+                    <form id="result-form" method="post" onsubmit="return confirm('Are you sure?')">
+                        {% csrf_token %}
+                        <br>
+                        <button type="submit" name="setResult" class="btn btn-warning see_more" style="margin-bottom: 10%">Set Result</button>
+                        <input type="hidden" name="match_id" value={{match.id}}>
+                        <div class="form-group">
+                            <select name="result" class="form-control">
+                                <option value="win">WIN</option>
+                                <option value="lose">LOSE</option>
+                            </select>
+                        </div>
+
+                    </form>
+                    </div>
+                    {% elif user == match.user2 and match.user1 is not None and match.user2_decision is None %}
+                    <div>
+                    <form id="result-form" method="post" onsubmit="return confirm('Are you sure?')">
+                        {% csrf_token %}
+                        <br>
+                        <button type="submit" name="setResult" class="btn btn-warning see_more" style="margin-bottom: 10%">Set Result</button>
+                        <input type="hidden" name="match_id" value={{match.id}}>
+                        <div class="form-group">
+                            <select name="result" class="form-control">
+                                <option value="win">WIN</option>
+                                <option value="lose">LOSE</option>
+                            </select>
+                        </div>
+
+                    </form>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+
+        </div>
+
+
+    </div>
+</div>
+
+
+
+
+
+ <script
+    src="https://code.jquery.com/jquery-3.1.1.min.js"
+    integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+    crossorigin="anonymous">
+    </script>
+
+    <script src="{% static 'tournaments/app.js' %}"></script>
+{% endblock %}

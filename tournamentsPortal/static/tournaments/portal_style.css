@@ -1,0 +1,248 @@
+.cont-tournament {
+    padding: 0%;
+    margin-top: 3%;
+}
+
+#external-container {
+    margin-top: 5%;
+}
+
+.header {
+    background-image: url("blue.png");
+    padding: 1.5%;
+    color: white;
+    position: relative;
+}
+
+.footer {
+    padding: 1.5%;
+    background-color: white;
+    position: relative;
+}
+
+nav {
+    background-color: white;
+}
+
+body {
+    background-color: whitesmoke;
+
+}
+
+#add{
+    width: 6em;
+    height: 6em;
+    align-self: center;
+    position: fixed;
+    left: 2%;
+    top: 13%;
+    border: none;
+}
+
+#edit{
+    width: 6em;
+    height: 2em;
+    align-self: center;
+    position: fixed;
+    left: 2%;
+    top: 17%;
+    border: none;
+    font-size: 1.2em;
+}
+
+#edit_sponsors{
+    width: 6em;
+    height: 2em;
+    align-self: center;
+    position: fixed;
+    left: 2%;
+    top: 25%;
+    border: none;
+    font-size: 1.2em;
+}
+
+#addToMine{
+    right: 2%;
+    bottom: 5%;
+    border: none;
+    position: absolute;
+}
+
+#deleteFromMine{
+    right: 2%;
+    bottom: 5%;
+    border: none;
+    position: absolute;
+}
+
+
+svg {
+    margin-top: 10%;
+    margin-bottom: 10%;
+}
+
+#main-container{
+    margin-top: 3%;
+    margin-bottom: 3%;
+    display: flex;
+    flex-direction: column;
+}
+
+#author{
+    position: absolute;
+    bottom: 5%;
+    right: 3%;
+}
+
+#date{
+    position: absolute;
+    bottom: 5%;
+    right: 3%;
+}
+
+#tournament_name{
+    position: absolute;
+    bottom: 5%;
+    right: 3%;
+}
+
+
+.modal-header {
+    background-image: url("blue.png");
+}
+
+.show-more{
+    color: gray;
+    background:none;
+    border:none;
+    outline: none;
+}
+
+button:focus {
+    outline:none;
+}
+
+.- {
+    width: 15%;
+}
+
+#search-cont{
+    align-self: flex-end;
+    display: flex;
+    justify-content: row;
+    width: 32%;
+}
+
+.form-control{
+    margin-right: 1%;
+}
+
+nav {
+    background-image: url("blue.png");
+    background-size: cover;
+    color: white;
+}
+
+.see_more {
+    margin-top: 1%;
+}
+
+.pagination{
+    margin-top: 2%;
+}
+
+#container-info {
+    margin-top: 0;
+    margin-bottom: 0.5%;
+    height: 100%;
+    background-color: white;
+    padding: 1%;
+    display: flex;
+}
+
+#details {
+    margin-bottom: 7%;
+}
+
+#tournament_header {
+    margin-bottom: 0;
+}
+
+td {
+   padding: 5px;
+}
+
+.logos {
+    margin-top: 1%;
+}
+
+.carousel-image {
+    width: 7%;
+    margin-right: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    display: block;
+
+  }
+
+  .carousel.is-fullscreen .carousel-image {
+    height: auto;
+    max-height: 50%;
+  }
+
+@media all and (max-width: 900px) {
+  .carousel-image {
+    width: 10%;
+  }
+}
+
+#map {
+    width: 50%;
+    height: 300px;
+    margin-left: 10%;
+    border-radius: 5px;
+}
+
+#register_feedback{
+    width: 40%;
+    margin-top: 2%;
+    text-align: center;
+}
+
+.match-draw {
+    margin-top: 5%;
+    background-color: white;
+    margin: 5%;
+    margin-bottom: 1em;
+}
+
+.match {
+    padding:2%;
+    font-size: 14px;
+    background-color: whitesmoke;
+}
+
+.seed {
+    color: gray;
+    font-size: 12px;
+}
+
+.head-draw{
+    background-image: url("blue.png");
+    margin-top: 2%;
+    margin-bottom: 2%;
+    padding: 1%;
+    color: white;
+    text-align: center;
+}
+
+.body-draw{
+    background-color: white;
+    padding: 3%;
+    width: 90%;
+}
+
+.winner {
+    color: #1E90FF;
+    font-weight: bold;
+}
